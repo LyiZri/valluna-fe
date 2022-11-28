@@ -46,7 +46,7 @@ const ArticlePageDetails = ({ pageValue }: IATDeatils) => {
                 </Box>
                 <KlShareBar />
             </Box>
-            <section className='p-4 mt-4 rounded-lg bg-cardbg-hover'>
+            <section className='p-4 mt-4 rounded-lg bg-cardbg-hover break-words'>
                 <div dangerouslySetInnerHTML={{__html:pageValue.content}}/>
             </section>
         </Box>

@@ -1,5 +1,5 @@
 const express = require('express')
-const next = require('next')
+import next from 'next'
 const {createProxyMiddleware } = require('http-proxy-middleware')
 
 const devProxy = {
