@@ -1,5 +1,7 @@
-// import next from 'next'
-const next =require('next')
+//online
+import next from 'next'
+//offline
+// const next =require('next')
 const express = require('express')
 const { createProxyMiddleware } = require('http-proxy-middleware')
 
