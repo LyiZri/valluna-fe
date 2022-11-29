@@ -37,3 +37,21 @@ div {
     background: black;
   }
 }
+.richhtml-box img{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  width: 100%;
+}
+.richhtml-box p{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 14px;
+  width: 400px;
+}
+
+.slick-dots li button{
+  width: 100px;
+  background-color: #fff !important;
+  display: block;
+  color: #fff !important;
+}

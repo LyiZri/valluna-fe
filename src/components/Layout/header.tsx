@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 
 
 enum ERoute{
-    HOME = "/",
+    HOME = "/home",
     ALL_GAMES = "/all-games",
     ARTICLES="/articles"
 }
@@ -19,6 +19,8 @@ export default function Header() {
     const [tabNum, setTabNum] = useState(0)
     const router = useRouter()
     useEffect(()=>{
+        console.log(router);
+        
         if(router?.route == ERoute.HOME){
             setTabNum(0)
         }else if(router?.route == ERoute.ALL_GAMES){

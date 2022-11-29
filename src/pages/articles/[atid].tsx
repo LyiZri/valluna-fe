@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '@/components/Layout'
+import Image from "next/image"
 import { IArticles } from '@/lib/type/articles'
 import { getArticleDetails, getArticlesList } from '@/lib/service/articles'
 import { useRouter } from 'next/router'
-import { Box, Skeleton } from '@mui/material'
+import { Box, Grid, Skeleton } from '@mui/material'
 import KlShareBar from '@/components/kl-sharebar'
 import KlIcon from '@/components/kl-icons/jndex'
-import { timestampToTime } from '@/lib/utils'
+import { timestampToTime, HTMLDecode, getShortenStr, getBlurDataURL } from '@/lib/utils'
+import KlCard from '@/components/kl-card'
+import { getGameDetails } from '@/lib/service/game'
 
 
 
@@ -29,10 +32,9 @@ interface IATDeatils {
 
 const ArticlePageDetails = ({ pageValue }: IATDeatils) => {
     return (
-
         <Box>
             <Box className='text-2xl font-bold break-words'>
-                {pageValue.article_title}{pageValue.article_title}
+                {pageValue.article_title}
             </Box>
             <Box className='flex justify-between w-full mt-4'>
                 <Box className='flex justify-start'>
@@ -46,13 +48,91 @@ const ArticlePageDetails = ({ pageValue }: IATDeatils) => {
                 </Box>
                 <KlShareBar />
             </Box>
-            <section className='p-4 mt-4 rounded-lg bg-cardbg-hover break-words'>
-                <div dangerouslySetInnerHTML={{__html:pageValue.content}}/>
+            <section className='p-4 mt-4 rounded-lg bg-cardbg-hover break-words leading-8 richhtml-box'>
+                {/* 富文本翻译 */}
+                <div className='w-full break-words' dangerouslySetInnerHTML={{ __html: HTMLDecode(pageValue.content) }} ></div>
             </section>
         </Box>
     )
 }
 
+const ArticleGame = ({ pageValue }: IATDeatils) => {
+    const [list, setList] = useState<IArticles[]>()
+    const [loading, setLoading] = useState(true)
+    const router = useRouter()
+    const getList = async () => {
+        setLoading(true)
+        const { data } = await getArticlesList({ article_status: 1 })
+        setList(data)
+        const { data: gameData } = await getGameDetails({ game_name: (pageValue?.games[0] as any).game_name })
+        setLoading(false)
+    }
+
+    const goArticlesPage = (atid: string) => {
+        router.push({ pathname: `/articles/[atid]`, query: { atid } })
+    }
+    useEffect(() => {
+        getList()
+    }, [])
+    return (
+        <Box className='ml-4'>
+            <KlCard className="mb-4" >
+                <Box className="flex justify-between cursor-pointer">
+                    {/* <Image
+                            src={item.article_img}
+                            className="min-h-[78px] h-[78px] w-[140px] min-w-[140px] rounded-xl"
+                            width={140}
+                            height={100}
+                            placeholder="blur"
+                            blurDataURL={getBlurDataURL(278, 138)}
+                            alt="" />
+                        <Box className="ml-4 flex flex-col justify-between h-[78px]">
+                            <Box className=''>
+                                {getShortenStr(item.article_title, 60)}
+                            </Box>
+                            <Box className='flex justify-between'>
+                                <Box className='flex justify-start mt-1'>
+                                    <span className='inline-block text-xs text-sec-stress leading-5 ml-2'>by {getShortenStr(item.author, 24)}</span>
+                                </Box>
+                                <Box className='mb-2'>
+                                    <KlIcon type='icon-date' className='text-xs  text-sec-stress align-middle'></KlIcon>
+                                    <div className='inline-block text-sec-stress text-xs ml-1'>{timestampToTime(item.optime)}</div>
+                                </Box>
+                            </Box>
+                        </Box> */}
+                </Box>
+            </KlCard>
+            {!loading && list.map((item, index) => {
+                return <KlCard className="my-4" key={index} onClick={() => {goArticlesPage(item.atid) }}>
+                    <Box className="flex justify-between cursor-pointer w-[400px]">
+                        <Image
+                            src={item.article_img}
+                            className="min-h-[78px] h-[78px] w-[140px] min-w-[140px] rounded-xl"
+                            width={140}
+                            height={100}
+                            placeholder="blur"
+                            blurDataURL={getBlurDataURL(278, 138)}
+                            alt="" />
+                        <Box className="ml-4 flex flex-col justify-between">
+                            <Box className='text-xs line-clamp-2'>
+                                {item.article_title}
+                            </Box>
+                            <Box className='flex justify-between'>
+                                <Box className='flex justify-start mt-1'>
+                                    <span className='inline-block text-xs text-sec-stress leading-5 '>by {getShortenStr(item.author, 12)}</span>
+                                </Box>
+                                <Box className='mb-2'>
+                                    <KlIcon type='icon-date' className='text-xs  text-sec-stress align-middle'></KlIcon>
+                                    <div className='inline-block text-sec-stress text-xs ml-1'>{timestampToTime(item.optime)}</div>
+                                </Box>
+                            </Box>
+                        </Box>
+                    </Box>
+                </KlCard>
+            })}
+        </Box>
+    )
+}
 
 export default function ArticleGlid() {
     const [loading, setLoading] = useState(true)
@@ -67,18 +147,25 @@ export default function ArticleGlid() {
     }
     useEffect(() => {
         getPageValue()
-    }, [])
+    }, [router.query.atid])
     return (
         <Layout>
-            <Box className='bg-cardbg rounded-2xl p-4'>
-                {
-                    loading &&
-                    <ArticleSkeletonBox />
-                }
-                {
-                    !loading && pageValue &&
-                    <ArticlePageDetails pageValue={pageValue} />
-                }
+            <Box className='my-8 flex justify-between'>
+                <Box className='bg-cardbg rounded-2xl p-4 w-full'>
+                    {
+                        loading &&
+                        <ArticleSkeletonBox />
+                    }
+                    {
+                        !loading && pageValue &&
+                        <Box>
+                            <ArticlePageDetails pageValue={pageValue} />
+                        </Box>
+                    }
+                </Box>
+                <Box>
+                    <ArticleGame pageValue={pageValue} />
+                </Box>
             </Box>
         </Layout>
     )

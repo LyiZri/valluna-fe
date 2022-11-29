@@ -1,5 +1,6 @@
-const express = require('express')
 import next from 'next'
+// const next =require('next')
+const express = require('express')
 const {createProxyMiddleware } = require('http-proxy-middleware')
 
 const devProxy = {

@@ -8,15 +8,20 @@ import React, { useEffect, useState } from 'react'
 import { getBlurDataURL, getShortenStr, timestampToTime } from "@/lib/utils"
 import KlIcon from "@/components/kl-icons/jndex"
 import KlSkeleton from "@/components/kl-skeleton"
+import { useRouter } from "next/router"
 
 export default function AllNews() {
     const [list, setList] = useState<IArticles[]>()
     const [loading, setLoading] = useState(false)
+    const router = useRouter()
     const getList = async () => {
         setLoading(true)
         const { data } = await getArticlesList({ article_status: 1 })
         setList(data)
         setLoading(false)
+    }
+    const goArticlesPage = (atid: string) => {
+        router.push({ pathname: `/articles/[atid]`, query: { atid: atid } })
     }
     useEffect(() => {
         getList()
@@ -31,7 +36,7 @@ export default function AllNews() {
                 {
                     !loading && list?.map((item, index) => {
                         return <Grid item key={index} xs={12} md={6}>
-                            <KlCard>
+                            <KlCard onClick={() => goArticlesPage(item.atid)}>
                                 <Box className="flex justify-between cursor-pointer">
 
                                     <Image

@@ -2,7 +2,8 @@ import type { AppProps } from 'next/app'
 import '../styles/globals.css'
 import 'tailwindcss/tailwind.css'
 import { createTheme,ThemeProvider } from '@mui/material'
-
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 export default function App({ Component, pageProps }: AppProps) {
 
 

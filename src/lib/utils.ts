@@ -51,3 +51,17 @@ export function timestampToTime(data: string | number) {
     let s = date.getSeconds();
     return Y + M + D;
 }
+
+export const HTMLDecode = (text:string) =>{
+  if(!text){
+    return ""
+  }
+  if(typeof text !== "string"){
+    return String(text)
+  }
+  let temp = document.createElement("div")
+  temp.innerHTML = text
+  const output = temp.textContent || temp.innerText
+  temp = null
+return output
+}
