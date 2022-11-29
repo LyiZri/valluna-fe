@@ -1,5 +1,5 @@
-// import next from 'next'
-const next =require('next')
+import next from 'next'
+// const next =require('next')
 const express = require('express')
 const { createProxyMiddleware } = require('http-proxy-middleware')
 
@@ -24,11 +24,11 @@ const handle = app.getRequestHandler()
 app.prepare()
     .then(() => {
         const server = express()
-        // if (devProxy) {
+        if (devProxy) {
             Object.keys(devProxy).forEach(function (context) {
                 server.use(createProxyMiddleware(context, devProxy[context]))
             })
-        // }
+        }
 
         server.all('*', (req, res) => {
             handle(req, res)
