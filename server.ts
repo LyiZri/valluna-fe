@@ -1,7 +1,7 @@
 import next from 'next'
 // const next =require('next')
 const express = require('express')
-const {createProxyMiddleware } = require('http-proxy-middleware')
+const { createProxyMiddleware } = require('http-proxy-middleware')
 
 const devProxy = {
     '/api': {
@@ -16,18 +16,18 @@ const devProxy = {
 const port = parseInt(process.env.PORT, 10) || 3001
 // const dev = process.env.NODE_ENV !== 'production'
 const app = next({
-    dev:true
+    dev: false
 })
 const handle = app.getRequestHandler()
 
 app.prepare()
     .then(() => {
         const server = express()
-        if ( devProxy) {
-            Object.keys(devProxy).forEach(function(context) {
+        // if (devProxy) {
+            Object.keys(devProxy).forEach(function (context) {
                 server.use(createProxyMiddleware(context, devProxy[context]))
             })
-        }
+        // }
 
         server.all('*', (req, res) => {
             handle(req, res)
