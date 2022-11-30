@@ -11,7 +11,7 @@ interface IProps {
 }
 
 export default function KlSkeleton({ gridSpace = 2, width = 301, height = 308, skeletonLength = 8, md = 3 }: IProps) {
-    const [arr,setArr] = useState([])
+    const [arr,setArr] = useState<number[]>([])
     useEffect(()=>{
         let _arr = []
         for (let index = 0; index < skeletonLength; index++) {

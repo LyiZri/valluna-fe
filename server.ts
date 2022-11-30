@@ -1,7 +1,7 @@
 //online
-import next from 'next'
+// import next from 'next'
 //offline
-// const next =require('next')
+const next =require('next')
 const express = require('express')
 const { createProxyMiddleware } = require('http-proxy-middleware')
 
@@ -11,14 +11,14 @@ const devProxy = {
         pathRewrite: {
             '^/api': '/api/'
         },
-        changeOrigin: false
+        changeOrigin: true
     }
 }
 
 const port = parseInt(process.env.PORT, 10) || 3001
-// const dev = process.env.NODE_ENV !== 'production'
+const dev = process.env.NODE_ENV !== 'production'
 const app = next({
-    dev: true
+    dev
 })
 const handle = app.getRequestHandler()
 

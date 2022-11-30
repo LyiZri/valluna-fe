@@ -1,16 +1,9 @@
-import Layout from "@/components/Layout";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import styles from './index.less';
 
-export default function Valluna() {
-  const router = useRouter()
-  useEffect(()=>{
-    if(router.pathname == "/"){
-      router.push("/home")
-    }
-  },[])
+export default function IndexPage() {
   return (
-    <Layout>
-      </Layout>
-  )
+    <div>
+      <h1 className={styles.title}>Page index</h1>
+    </div>
+  );
 }
