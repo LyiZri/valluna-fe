@@ -1,9 +1,8 @@
-import axios from "axios" 
-import { request, requestDataWrap } from "../request"
+import { request } from "../request"
 
-export const getArticlesList = async (option) =>{
+export const getArticlesList = async (option:any) =>{
     return request("/api/articles/list",option)
 }
-export const getArticleDetails = async (option) =>{
+export const getArticleDetails = async (option:any) =>{
     return request("/api/articles/fetching",option)
 }
